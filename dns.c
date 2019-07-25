@@ -1,7 +1,3 @@
-// Protocoale de comunicatii
-// Laborator 9 - DNS
-// dns.c
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -24,16 +20,16 @@ void get_ip(char* name)
 	struct addrinfo hints, *result, *p;
 	char res[80];
 
-	// TODO: set hints
+	// set hints
 	memset((char *) &hints, 0, sizeof(hints));
 	hints.ai_family = AF_UNSPEC;
 
-	// TODO: get addresses
+	// get addresses
 	ret = getaddrinfo(name, NULL, &hints, &result);
 	if (ret < 0)
 		gai_strerror(ret);
 
-	// TODO: iterate through addresses and print them
+	// iterate through addresses and print them
 	for (p = result; p != NULL; p = p->ai_next) {
 		if (p->ai_family == AF_INET) { // pentru IPv4
 			struct sockaddr_in *addr = (struct sockaddr_in *)p->ai_addr;
@@ -41,7 +37,7 @@ void get_ip(char* name)
 			inet_ntop(AF_INET, (struct in_addr *)&addr->sin_addr, res, 80);
 			printf("ip: %s\nport: %d\n", res, ntohs(addr->sin_port));
 		}
-		else { // pentru IPv6
+		else { // for IPv6
 			struct sockaddr_in6 *addr = (struct sockaddr_in6 *)p->ai_addr;
 			memset(res, 0, 80);
 			inet_ntop(AF_INET6, (struct in6_addr *)&addr->sin6_addr, res, 80);
@@ -49,7 +45,7 @@ void get_ip(char* name)
 		}
 	}
 
-	// TODO: free allocated data
+	// free allocated data
 	freeaddrinfo(result);
 }
 
@@ -64,18 +60,18 @@ void get_name(char* ip)
 	memset(host, 0, 1024);
 	memset(service, 0, 20);
 
-	// TODO: fill in address data
+	// fill in address data
 	memset((char *) &addr, 0, sizeof(addr));
 	inet_aton("127.0.0.1", &addr.sin_addr);
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(20000);
 
-	// TODO: get name and service
+	// get name and service
 	ret = getnameinfo((struct sockaddr *)&addr, sizeof(struct sockaddr_in), host, 1024, service, 20, 0);
 	if (ret < 0)
 		gai_strerror(ret);
 
-	// TODO: print name and service
+	// print name and service
 	printf("host: %s\nservice: %s\n", host, service);
 }
 
